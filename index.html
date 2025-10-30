@@ -1,0 +1,2122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PreMium Nexus Testing Service</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #1a56db;
+            --secondary-blue: #0ea5e9;
+            --dark-blue: #1e3a8a;
+            --light-blue: #dbeafe;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --accent-teal: #14b8a6;
+            --gradient-blue: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            --gradient-green: linear-gradient(135deg, var(--accent-green), #34d399);
+            --gradient-orange: linear-gradient(135deg, var(--accent-orange), #f97316);
+            --gradient-red: linear-gradient(135deg, var(--accent-red), #f87171);
+            --gradient-purple: linear-gradient(135deg, var(--accent-purple), #a78bfa);
+            --gradient-pink: linear-gradient(135deg, var(--accent-pink), #f472b6);
+            --gradient-teal: linear-gradient(135deg, var(--accent-teal), #2dd4bf);
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 3px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            color: #1e3a8a;
+            font-size: 11px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .logo h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--dark-blue);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2px;
+        }
+
+        .logo p {
+            color: var(--primary-blue);
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+
+        .page {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            display: none;
+            position: relative;
+        }
+
+        .active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Reusable UI Elements */
+        .promo-banner {
+            background: linear-gradient(135deg, #1e3a8a, #1a56db);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 0.6rem;
+        }
+
+        .promo-banner h2 {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: #ffd700;
+        }
+
+        .promo-banner p {
+            line-height: 1.4;
+            text-align: justify;
+        }
+
+        .form-group {
+            margin-bottom: 8px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 2px;
+            font-weight: 600;
+            color: var(--dark-blue);
+            font-size: 0.7rem;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 6px 9px;
+            border: 1.5px solid var(--light-blue);
+            border-radius: 5px;
+            font-size: 0.7rem;
+            background: #f8fafc;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 2px rgba(26, 86, 219, 0.15);
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        .password-container .form-input {
+            padding-right: 30px;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-blue);
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 10px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            gap: 4px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--gradient-blue);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(26, 86, 219, 0.2);
+        }
+
+        .btn-contact {
+            background: var(--gradient-green);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-contact:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-whatsapp:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(37, 211, 102, 0.2);
+        }
+
+        .btn-purple {
+            background: var(--gradient-purple);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-purple:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(139, 92, 246, 0.2);
+        }
+
+        .btn-red {
+            background: var(--gradient-red);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-red:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-orange {
+            background: var(--gradient-orange);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-orange:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(245, 158, 11, 0.2);
+        }
+
+        .btn-pink {
+            background: var(--gradient-pink);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-pink:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(236, 72, 153, 0.2);
+        }
+
+        .btn-teal {
+            background: var(--gradient-teal);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-teal:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(20, 184, 166, 0.2);
+        }
+
+        .error-box {
+            background: #fee2e2;
+            color: var(--accent-red);
+            padding: 5px 7px;
+            border-radius: 3px;
+            margin-top: 6px;
+            display: none;
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+
+        /* Main Page */
+        .main-page-buttons {
+            display: grid;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        /* Quiz Access Section */
+        .quiz-access-section {
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        /* Payment Section */
+        .payment-info {
+            background: #f0f9ff;
+            border-radius: 5px;
+            padding: 10px;
+            border: 1px solid var(--light-blue);
+            margin-bottom: 8px;
+        }
+
+        .payment-info h3 {
+            font-size: 0.8rem;
+            color: var(--dark-blue);
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .payment-info p {
+            font-size: 0.7rem;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .payment-info span {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .acknowledgment-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.7rem;
+            margin-top: 8px;
+            font-weight: 500;
+            color: #4b5563;
+        }
+
+        /* Quiz Section */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1.5px solid var(--light-blue);
+        }
+
+        .quiz-title-container {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            width: 80%;
+        }
+
+        .quiz-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.7rem;
+            color: var(--dark-blue);
+            font-weight: 600;
+        }
+
+        .timer-container {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+            width: 100%;
+        }
+
+        .timer, .question-timer {
+            background: var(--gradient-blue);
+            color: white;
+            padding: 3px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            box-shadow: var(--shadow);
+            white-space: nowrap;
+        }
+
+        .timer.total-timer {
+            background: var(--gradient-orange);
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.4s ease;
+            background: var(--gradient-blue);
+        }
+
+        .question-nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(14px, 1fr));
+            gap: 3px;
+            margin-bottom: 8px;
+        }
+
+        .question-nav-item {
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+            font-weight: 700;
+            font-size: 0.5rem;
+            cursor: pointer;
+            background: white;
+            border: 1.5px solid var(--light-blue);
+            transition: all 0.2s;
+        }
+
+        .question-nav-item.current {
+            background: var(--gradient-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .question-nav-item.solved {
+            background: var(--gradient-green);
+            color: white;
+            border-color: var(--accent-green);
+        }
+
+        .question-nav-item.visited {
+            background: var(--gradient-orange);
+            color: white;
+            border-color: var(--accent-orange);
+        }
+
+        .question-nav-item.out-of-syllabus {
+            background: var(--gradient-red);
+            color: white;
+            border-color: var(--accent-red);
+        }
+
+        .question-container {
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--dark-blue);
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .option {
+            padding: 5px 8px;
+            border: 1.5px solid var(--light-blue);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            background: #f8fafc;
+            font-size: 0.7rem;
+            position: relative;
+        }
+
+        .option:hover {
+            border-color: var(--primary-blue);
+            background: #e0f2fe;
+        }
+
+        .option.selected {
+            border-color: var(--primary-blue);
+            background: #dbeafe;
+        }
+
+        .option.correct {
+            border-color: var(--accent-green);
+            background: #d1fae5;
+        }
+
+        .option.incorrect {
+            border-color: var(--accent-red);
+            background: #fee2e2;
+        }
+
+        .option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .reasoning {
+            background: #f8fafc;
+            border-radius: 5px;
+            padding: 8px;
+            margin-top: 8px;
+            display: none;
+            border-left: 3px solid var(--primary-blue);
+            font-size: 0.7rem;
+        }
+
+        .reasoning-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--dark-blue);
+            font-size: 0.75rem;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 12px;
+        }
+
+        .nav-btn {
+            padding: 5px 7px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .btn-back {
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            color: white;
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            color: white;
+        }
+
+        .btn-skip {
+            background: var(--gradient-orange);
+            color: white;
+        }
+
+        .btn-reasoning {
+            background: var(--gradient-purple);
+            color: white;
+        }
+
+        .btn-reasoning.disabled {
+            background: #dc3545;
+            color: white;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .btn-reasoning.disabled:hover {
+            background: #dc3545;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-out-of-syllabus {
+            background: var(--gradient-red);
+            color: white;
+        }
+
+        .btn-submit {
+            background: var(--gradient-green);
+            color: white;
+        }
+
+        /* Results Page */
+        .results-header-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 12px;
+        }
+
+        .results-header-buttons .btn {
+            padding: 4px 6px;
+            font-size: 0.65rem;
+            width: 100%;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #f8fafc, #e0f2fe);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-blue);
+        }
+
+        .result-card h2 {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: var(--dark-blue);
+        }
+
+        .result-card table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.7rem;
+            margin-top: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .result-card th, .result-card td {
+            padding: 5px;
+            border: 1px solid #dbeafe;
+            text-align: left;
+        }
+
+        .result-card th {
+            background-color: var(--light-blue);
+            font-weight: 600;
+        }
+
+        .result-card td {
+            background-color: #f8fafc;
+        }
+
+        .result-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        /* All MCQs Page */
+        .all-mcqs-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .all-mcq-item {
+            padding: 10px;
+            border: 1px solid var(--light-blue);
+            border-radius: 8px;
+            background: #f8fafc;
+            position: relative;
+        }
+
+        .all-mcq-item .question-text {
+            color: var(--dark-blue);
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .all-mcq-options {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 6px;
+        }
+
+        .all-mcq-option {
+            font-size: 0.7rem;
+            padding: 4px 6px;
+            border-radius: 4px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .all-mcq-option.correct {
+            background: #d1fae5;
+            color: var(--accent-green);
+            font-weight: 600;
+            border-color: #a7f3d0;
+        }
+
+        .all-mcq-reasoning {
+            margin-top: 8px;
+            font-size: 0.7rem;
+            color: #4b5563;
+            padding: 8px;
+            background: #f8fafc;
+            border-radius: 4px;
+            border-left: 3px solid var(--primary-blue);
+        }
+
+        .all-mcq-reasoning strong {
+            color: var(--dark-blue);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .quiz-header {
+                flex-direction: column;
+                gap: 6px;
+                align-items: flex-start;
+            }
+            
+            .navigation-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .compact-contact-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .result-actions {
+                flex-direction: column;
+            }
+            
+            .timer-container {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-top: 5px;
+                justify-content: flex-end;
+                width: 100%;
+            }
+            
+            .quiz-title-container {
+                width: 100%;
+            }
+            
+            .dmc-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .dmc-grades, .dmc-performance-bars {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .dmc-watermark {
+                font-size: 2rem;
+            }
+            
+            .promo-banner {
+                padding: 12px;
+            }
+            
+            .promo-banner h2 {
+                font-size: 0.8rem;
+            }
+            
+            .promo-banner p {
+                font-size: 0.55rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>PreMium Nexus Testing Service</h1>
+            <p>Excellence in Educational Assessment</p>
+        </div>
+
+        <div id="signin-page" class="page active">
+            <div class="promo-banner">
+                <h2>Unlock Your Potential with PreMium Nexus Testing Service</h2>
+                <p>Boost your preparation with PreMium Nexus Testing Service's realistic online tests, crafted by experts to mirror the actual exam's pattern and challenge. Experience instant feedback, detailed analysis, and flexible online access – your pathway to confidence and success!</p>
+            </div>
+            
+            <h2>Access Test</h2>
+            <p>Sign in or use your access code</p>
+            
+            <div class="main-page-buttons">
+                <button class="btn btn-primary" onclick="showQuizAccessForm()">
+                    <i class="fas fa-lock"></i>
+                    <span>Sign In with Quiz Access Code</span>
+                </button>
+                <button class="btn btn-primary" onclick="showRegistrationPage()">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Sign Up to Get Quiz Access</span>
+                </button>
+                <button class="btn btn-purple" onclick="showDeveloperAccessForm()">
+                    <i class="fas fa-code"></i>
+                    <span>Developer Access</span>
+                </button>
+            </div>
+            
+            <div id="developer-access-form" class="quiz-access-section">
+                <h3>Developer Login</h3>
+                <div class="password-container input-container">
+                    <input type="password" id="developerPassword" class="form-input" placeholder="Enter the Developer Password">
+                    <i class="fas fa-eye-slash input-icon" id="toggleDeveloperPassword"></i>
+                </div>
+                <button class="btn btn-purple" onclick="checkDeveloperPassword()">
+                    <span>Log In</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                <div id="dev-error-box" class="error-box">
+                    Invalid developer password.
+                </div>
+            </div>
+            
+            <div id="quiz-access-form" class="quiz-access-section">
+                <h3>Enter Quiz Access Code</h3>
+                <div class="password-container input-container">
+                    <input type="password" id="quizAccessCode" class="form-input" placeholder="Enter your 12-Digit Quiz Access Code here">
+                    <i class="fas fa-eye-slash input-icon" id="toggleQuizAccessCode"></i>
+                </div>
+                <button class="btn btn-primary" onclick="checkQuizAccessCode()">
+                    <span>Access Quiz</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                <div id="quiz-error-box" class="error-box">
+                    Invalid quiz access code.
+                </div>
+            </div>
+            
+        </div>
+
+        <div id="registration-page" class="page">
+            <div class="promo-banner">
+                <h2>Unlock Your Potential with PreMium Nexus Testing Service</h2>
+                <p>Boost your preparation with PreMium Nexus Testing Service's realistic online tests, crafted by experts to mirror the actual exam's pattern and challenge. Experience instant feedback, detailed analysis, and flexible online access – your pathway to confidence and success!</p>
+            </div>
+            
+            <h2>Student Registration</h2>
+            <p>Please provide your details to register</p>
+            
+            <div class="form-group">
+                <label class="form-label">Student Name</label>
+                <input type="text" id="studentName" class="form-input" placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Father Name</label>
+                <input type="text" id="fatherName" class="form-input" placeholder="Enter your father's name">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" id="email" class="form-input" placeholder="Enter your email address">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Mobile Number (WhatsApp)</label>
+                <input type="tel" id="mobile" class="form-input" placeholder="+92XXXXXXXXXX">
+            </div>
+            <button class="btn btn-primary" onclick="validateRegistrationForm()">
+                <span>Proceed to Payment</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <div id="payment-page" class="page">
+            <div class="promo-banner">
+                <h2>Unlock Your Potential with PreMium Nexus Testing Service</h2>
+                <p>Boost your preparation with PreMium Nexus Testing Service's realistic online tests, crafted by experts to mirror the actual exam's pattern and challenge. Experience instant feedback, detailed analysis, and flexible online access – your pathway to confidence and success!</p>
+            </div>
+            
+            <h2>Payment Details</h2>
+            <p>Please complete the payment to receive your access code</p>
+            
+            <div class="payment-info">
+                <h3>Payment Information</h3>
+                <p>Please make payment through our official payment methods. After payment, you will receive an access code.</p>
+                <p>Contact us on WhatsApp at <a id="payment-whatsapp-link" href="https://wa.me/923247012882" style="color: var(--accent-green); text-decoration: none;">+923247012882</a> for payment details.</p>
+                <p style="margin-top: 8px; font-weight: bold;">Account Holder: <span id="payment-account-holder">Account Holder Name</span></p>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Transaction ID</label>
+                <input type="text" id="transactionId" class="form-input" placeholder="Enter transaction ID">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Your Account Holder Name</label>
+                <input type="text" id="accountHolderName" class="form-input" placeholder="Enter your payment account name">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Amount Sent</label>
+                <input type="number" id="amountSent" class="form-input" placeholder="Enter amount">
+            </div>
+            <div class="acknowledgment-checkbox">
+                <input type="checkbox" id="acknowledgment">
+                <label for="acknowledgment">I acknowledge that I have submitted the correct information and payment.</label>
+            </div>
+            
+            <button class="btn btn-primary" onclick="submitPayment()">
+                <span>Submit Payment Info</span>
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+
+        <div id="quiz-access-page" class="page">
+            <div class="promo-banner">
+                <h2>Unlock Your Potential with PreMium Nexus Testing Service</h2>
+                <p>Boost your preparation with PreMium Nexus Testing Service's realistic online tests, crafted by experts to mirror the actual exam's pattern and challenge. Experience instant feedback, detailed analysis, and flexible online access – your pathway to confidence and success!</p>
+            </div>
+            
+            <h2>Quiz Access</h2>
+            <p>A Quiz Access Code will be sent to your registered mobile number after we receive and verify your payment.</p>
+
+            <div class="password-container input-container">
+                <input type="password" id="quizAccessFinal" class="form-input" placeholder="Enter your 12-Digit Quiz Access Code here">
+                <i class="fas fa-eye-slash input-icon" id="toggleQuizAccessFinal"></i>
+            </div>
+            
+            <button class="btn btn-primary" onclick="accessQuiz()">
+                <span>Access Quiz</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            
+            <div id="final-quiz-error-box" class="error-box">
+                Invalid quiz access code.
+            </div>
+        </div>
+        
+        <div id="quiz-page" class="page">
+            <div class="promo-banner">
+                <h2>Unlock Your Potential with PreMium Nexus Testing Service</h2>
+                <p>Boost your preparation with PreMium Nexus Testing Service's realistic online tests, crafted by experts to mirror the actual exam's pattern and challenge. Experience instant feedback, detailed analysis, and flexible online access – your pathway to confidence and success!</p>
+            </div>
+
+            <div class="quiz-header">
+                <div class="quiz-title-container">
+                    <h2 id="quiz-title"></h2>
+                    <div class="quiz-info">
+                        <span>Subject: <span id="quiz-subject">English Grammar</span></span>
+                        <span>Per MCQ: <span id="per-mcq-time">1</span> Minute</span>
+                    </div>
+                </div>
+            </div>
+            <div class="timer-container">
+                <div class="timer" id="question-timer">60</div>
+                <div class="timer total-timer" id="timer">40:00</div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="quiz-progress"></div>
+            </div>
+
+            <div class="question-nav" id="question-nav"></div>
+            
+            <div class="question-container">
+                <div class="question-text" id="question-text"></div>
+                <div class="options-container" id="options-container"></div>
+                <div class="reasoning" id="reasoning">
+                    <div class="reasoning-title">Explanation:</div>
+                    <div id="reasoning-text"></div>
+                </div>
+            </div>
+            
+            <div class="navigation-buttons">
+                <button class="nav-btn btn-back" onclick="navigateQuestion('prev')">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button class="nav-btn btn-next" onclick="navigateQuestion('next')">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="nav-btn btn-skip" onclick="navigateQuestion('skip')">
+                    <i class="fas fa-forward"></i> Skip
+                </button>
+                <button class="nav-btn btn-out-of-syllabus" onclick="markOutOfSyllabus()">
+                    <i class="fas fa-ban"></i> Out of Syllabus
+                </button>
+                <button class="nav-btn btn-reasoning disabled" id="reasoning-btn" onclick="toggleReasoning()">
+                    <i class="fas fa-lightbulb"></i> Reasoning
+                </button>
+                <button class="nav-btn btn-submit" onclick="submitTest()">
+                    Submit <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="results-page" class="page">
+            <div class="results-header-buttons">
+                <a id="website-link" href="#" target="_blank" class="btn btn-primary"><i class="fas fa-globe"></i> Website</a>
+                <a id="whatsapp-contact-link" href="#" target="_blank" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> Whatsapp Contact</a>
+                <a id="whatsapp-community-link" href="#" target="_blank" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> Whatsapp Community</a>
+            </div>
+            
+            <div class="result-card">
+                <h2>Student Information</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody id="student-info-table"></tbody>
+                </table>
+            </div>
+
+            <div class="result-card">
+                <h2>Test Results</h2>
+                <table>
+                    <tbody id="quiz-results-table"></tbody>
+                </table>
+            </div>
+            
+            <div class="result-actions">
+                <button class="btn btn-primary" onclick="restartTest()">
+                    <i class="fas fa-redo"></i> Retake Full Test
+                </button>
+                <button class="btn btn-primary" onclick="retakeIncorrect()">
+                    <i class="fas fa-bolt"></i> Retake Incorrect Questions
+                </button>
+                <button class="btn btn-primary" onclick="viewAllMcqs()">
+                    <i class="fas fa-clipboard-list"></i> View All MCQs
+                </button>
+            </div>
+        </div>
+
+        <div id="all-mcqs-page" class="page">
+            <h2>All MCQs and Solutions</h2>
+            <div class="all-mcqs-list" id="all-mcqs-list"></div>
+            <button class="btn btn-primary" onclick="showPage('results-page')">
+                <i class="fas fa-arrow-left"></i> Back to Results
+            </button>
+        </div>
+    </div>
+    
+    <script>
+// Quiz data - Excretion 
+const quizData_Dev_PDA_0002 = [
+    {
+        question: "An animal native to an arid, desert environment primarily excretes a nitrogenous waste product characterized by insolubility and minimal water requirement. What is the most energy-efficient precursor conversion for this excretory strategy, given the common initial nitrogenous waste?",
+        options: [
+            "Ammonia to urea",
+            "Ammonia to uric acid",
+            "Urea to uric acid",
+            "Protein to ammonia"
+        ],
+        correctAnswer: 1,
+        reasoning: "The animal is uricotelic (insoluble, minimal water requirement, e.g., insects, reptiles, birds). The most common initial nitrogenous waste from metabolism is ammonia. Converting ammonia to uric acid is the adapted pathway, requiring energy but highly conserving water in arid habitats, aligning with the description of uricotelic animals."
+    },
+    {
+        question: "A patient presents with persistent hydronephrosis (kidney swelling due to urine backup). Which anatomical structure, if chronically obstructed, would most directly lead to this condition?",
+        options: [
+            "Renal artery",
+            "Renal vein",
+            "Ureter",
+            "Urethra"
+        ],
+        correctAnswer: 2,
+        reasoning: "Hydronephrosis signifies urine accumulation within the kidney. The ureter transports urine from the renal pelvis of the kidney to the urinary bladder. An obstruction in the ureter would prevent urine outflow from the kidney, causing it to back up and swell."
+    },
+    {
+        question: "The primary factor establishing high hydrostatic pressure within the glomerulus, essential for ultrafiltration, is best described as:",
+        options: [
+            "Active secretion of ions by podocytes",
+            "Differential diameters of glomerular arterioles",
+            "Presence of the basement membrane within Bowman's capsule",
+            "Extensive brush border of the proximal tubule"
+        ],
+        correctAnswer: 1,
+        reasoning: "The content states the glomerulus is 'supplied by an afferent arteriole and drained by a narrower efferent arteriole, which creates high hydrostatic pressure for filtration.' This refers to the differential diameters of these vessels."
+    },
+    {
+        question: "A genetic mutation causes the ascending limb of the Loop of Henle to become permeable to water. What would be the most likely immediate consequence on urine production?",
+        options: [
+            "Decreased urine volume and increased concentration",
+            "Increased urine volume and decreased concentration",
+            "Increased urine volume and inability to concentrate urine effectively",
+            "Decreased urine volume and inability to dilute urine effectively"
+        ],
+        correctAnswer: 2,
+        reasoning: "The ascending limb is normally impermeable to water, actively transporting solutes out to dilute the filtrate and concentrate the medullary interstitium. If it became permeable to water, water would follow solutes out, reducing filtrate dilution and weakening the medullary osmotic gradient. This leads to less water reabsorption in the collecting ducts, resulting in increased urine volume and an impaired ability to concentrate urine."
+    },
+    {
+        question: "A patient's urine analysis reveals a low pH and the presence of crystalline structures. Given the potential stone types, what dietary modification would be most relevant for preventing recurrence if these stones were confirmed?",
+        options: [
+            "Reducing calcium intake",
+            "Increasing fluid intake",
+            "Limiting purine-rich foods",
+            "Decreasing phosphate consumption"
+        ],
+        correctAnswer: 2,
+        reasoning: "The document states 'Acidic urine (low pH) suggests calcium oxalate or uric acid stones'. Uric acid is formed from the breakdown of nucleic acids (purines). Therefore, limiting purine-rich foods would reduce uric acid production and help prevent uric acid stone recurrence."
+    },
+    {
+        question: "A crucial initial step for a successful kidney transplant, aimed at minimizing immediate immune attack, involves testing for:",
+        options: [
+            "Renal artery diameter",
+            "ABO blood group compatibility",
+            "Recipient urine pH",
+            "Donor kidney size"
+        ],
+        correctAnswer: 1,
+        reasoning: "The document lists 'ABO blood group match' as the first principle for compatibility, indicating its immediate importance in preventing hyperacute rejection."
+    },
+    {
+        question: "Which mechanism primarily contributes to heat loss via electromagnetic waves from the body surface?",
+        options: [
+            "Convection",
+            "Conduction",
+            "Evaporation",
+            "Radiation"
+        ],
+        correctAnswer: 3,
+        reasoning: "The definition provided states 'Radiation (~50%): Heat transfer via electromagnetic waves'."
+    },
+    {
+        question: "A mammal, typically homeothermic, is observed with elevated metabolic activity *without* visible muscle contractions, in response to cold. This suggests activation of:",
+        options: [
+            "Shivering thermogenesis",
+            "Non-shivering thermogenesis",
+            "Vasodilation",
+            "Piloerection"
+        ],
+        correctAnswer: 1,
+        reasoning: "The document defines 'Non-shivering Thermogenesis' as 'Increased metabolic rate induced by hormones'. Shivering thermogenesis involves 'spasmodic contractions of voluntary muscles'."
+    },
+    {
+        question: "An organism primarily relies on ammonia as its excretory product. This strategy is evolutionarily advantageous in an environment characterized by:",
+        options: [
+            "Scarcity of water",
+            "Abundant water",
+            "High atmospheric oxygen",
+            "Low atmospheric oxygen"
+        ],
+        correctAnswer: 1,
+        reasoning: "Ammonia is highly toxic and requires '~500 ml of water per 1g nitrogen for dilution'. This high water requirement makes it suitable for 'aquatic habitats' where water is abundant."
+    },
+    {
+        question: "The *critical* role of the vasa recta in the juxtamedullary nephron is to:",
+        options: [
+            "Initiate ultrafiltration by maintaining high hydrostatic pressure",
+            "Transport glucose and amino acids back into the bloodstream",
+            "Preserve the medullary osmotic gradient established by the Loop of Henle",
+            "Secrete hydrogen ions to regulate blood pH"
+        ],
+        correctAnswer: 2,
+        reasoning: "The document explicitly states, 'Vasa recta run anti-parallel to loops of Henle, maintaining the osmotic gradient.' This interaction is crucial for the kidney's ability to concentrate urine."
+    },
+    {
+        question: "Damage to the podocytes of Bowman's capsule would most directly impair:",
+        options: [
+            "Active reabsorption of salts in the ascending limb",
+            "The integrity of the filtration barrier",
+            "Hormone secretion by the kidney",
+            "The countercurrent exchange mechanism"
+        ],
+        correctAnswer: 1,
+        reasoning: "Bowman's Capsule cells (podocytes) along with capillary endothelium and basement membrane, form the filtration barrier, allowing filtration of plasma constituents but retaining large proteins. Damage to podocytes would compromise this barrier."
+    },
+    {
+        question: "A patient diagnosed with end-stage renal disease (ESRD) typically experiences uremia. This condition is fundamentally characterized by:",
+        options: [
+            "Excessive water retention",
+            "Elevated blood pressure due to renin overproduction",
+            "Accumulation of metabolic wastes in the blood",
+            "Autoimmune destruction of kidney tissue"
+        ],
+        correctAnswer: 2,
+        reasoning: "The text states that ESRD can lead to 'uremia (buildup of wastes)'. This is the defining characteristic of the condition."
+    },
+    {
+        question: "Which characteristic *best* differentiates a homeotherm from a poikilotherm, based on the provided text?",
+        options: [
+            "Its primary source of body heat",
+            "Its ability to survive in diverse environments",
+            "Its dependence on external heat sources",
+            "Its core body temperature range"
+        ],
+        correctAnswer: 0,
+        reasoning: "Homeotherms 'maintain a fairly constant body temperature physiologically by generating internal heat (high metabolic rate)' while poikilotherms 'Rely on external heat sources'. The *primary source* of heat is the key distinction."
+    },
+    {
+        question: "A newly discovered terrestrial vertebrate lays shelled eggs. Its nitrogenous waste product is most likely:",
+        options: [
+            "Highly soluble ammonia",
+            "Moderately toxic urea",
+            "Insoluble uric acid",
+            "A mix of ammonia and urea"
+        ],
+        correctAnswer: 2,
+        reasoning: "The document states, 'Shell-laying animals excrete uric acid as a solid to avoid toxic soluble waste accumulation within the egg.'"
+    },
+    {
+        question: "The segment of the nephron primarily responsible for bulk reabsorption of essential nutrients like glucose, amino acids, and vitamins is the:",
+        options: [
+            "Glomerulus",
+            "Loop of Henle",
+            "Proximal Convoluted Tubule",
+            "Distal Convoluted Tubule"
+        ],
+        correctAnswer: 2,
+        reasoning: "The PCT is described as the 'Longest part... and selective reabsorption (~80% of glomerular filtrate, including glucose, amino acids, vitamins, hormones, and 80% of Na+ and water)'."
+    },
+    {
+        question: "Upon entering the kidney, blood passes through a specific sequence of vessels before reaching the glomerulus. This sequence starts with the renal artery, followed by:",
+        options: [
+            "Peritubular capillaries",
+            "Efferent arterioles",
+            "Afferent arterioles",
+            "Vasa recta"
+        ],
+        correctAnswer: 2,
+        reasoning: "The blood flow path is 'Renal artery -> Afferent arterioles -> Glomerulus'."
+    },
+    {
+        question: "If the hypothalamus detects a rise in core body temperature, which immediate physiological response would it *not* typically initiate to restore balance?",
+        options: [
+            "Vasodilation",
+            "Increased sweat production",
+            "Piloerection",
+            "Decreased metabolic activity"
+        ],
+        correctAnswer: 2,
+        reasoning: "The document lists 'If Body Temperature Rises: Vasodilation, activation of sweat glands, decreased metabolic activity.' Piloerection ('goose-pimples') is a heat *conservation* mechanism, activated when body temperature *falls*."
+    },
+    {
+        question: "A patient presents with symptoms consistent with a kidney stone. The diagnostic aid of acidic urine would suggest the presence of which stone type(s)?",
+        options: [
+            "Calcium phosphate only",
+            "Magnesium ammonium phosphate only",
+            "Calcium oxalate or uric acid",
+            "Cystine or calcium phosphate"
+        ],
+        correctAnswer: 2,
+        reasoning: "The document explicitly states, 'Acidic urine (low pH) suggests calcium oxalate or uric acid stones'."
+    },
+    {
+        question: "Antidiuretic hormone (ADH) primarily exerts its effect on which part of the nephron to regulate water reabsorption?",
+        options: [
+            "Proximal Convoluted Tubule",
+            "Descending limb of Loop of Henle",
+            "Ascending limb of Loop of Henle",
+            "Collecting Ducts"
+        ],
+        correctAnswer: 3,
+        reasoning: "The text states that 'Collecting Ducts... Normally impermeable to water, but ADH... opens water channels, allowing water reabsorption and concentrated urine formation'."
+    },
+    {
+        question: "The fundamental biological purpose of excretion is the removal of:",
+        options: [
+            "Indigestible food residues",
+            "Excess water and salts",
+            "Toxic nitrogenous metabolic wastes",
+            "Carbon dioxide from cellular respiration"
+        ],
+        correctAnswer: 2,
+        reasoning: "The definition states: 'The removal of toxic chemical waste, primarily nitrogen-containing compounds, produced by metabolic processes within cells'."
+    },
+    {
+        question: "The primary biological challenge addressed by lifelong immunosuppressive drugs in kidney transplant recipients is:",
+        options: [
+            "Preventing surgical site infections",
+            "Mitigating fluid retention",
+            "Suppressing the immune system's attack on the donor organ",
+            "Regulating post-operative blood pressure"
+        ],
+        correctAnswer: 2,
+        reasoning: "The document states, 'Rejection: A primary problem, prevented by lifelong immunosuppressive drugs (e.g., cyclosporine, steroids)'."
+    },
+    {
+        question: "Fever, or pyrexia, is characterized by an increase in core body temperature due to:",
+        options: [
+            "Direct bacterial destruction of heat-sensing neurons",
+            "Pathogen-induced lowering of the hypothalamic temperature set point",
+            "Pyrogen-mediated elevation of the hypothalamic temperature set point",
+            "Overproduction of metabolic heat by muscle contractions"
+        ],
+        correctAnswer: 2,
+        reasoning: "The text explains, 'Fever... Cause: Pyrogens (toxins from pathogenic organisms or chemicals from neutrophils) directly affect the hypothalamus, increasing its temperature set point'."
+    },
+    {
+        question: "A significant functional difference between cortical and juxtamedullary nephrons lies in the latter's enhanced ability to:",
+        options: [
+            "Produce dilute urine",
+            "Maintain the medullary osmotic gradient",
+            "Filter blood plasma at a higher rate",
+            "Reabsorb essential nutrients in the PCT"
+        ],
+        correctAnswer: 1,
+        reasoning: "Juxtamedullary nephrons 'long loops of Henle extending deep into medulla. Crucial for developing osmotic gradients to concentrate urine and for water retention'."
+    },
+    {
+        question: "The higher incidence of urinary tract infections (UTIs) in women compared to men is attributed to:",
+        options: [
+            "Different kidney internal structures",
+            "Shorter urethral length",
+            "Higher rates of kidney stone formation",
+            "Differences in bladder capacity"
+        ],
+        correctAnswer: 1,
+        reasoning: "The document states, 'More common in women (shorter urethra)'."
+    },
+    {
+        question: "Human excretion of uric acid differs from uricotelic animals primarily in its:",
+        options: [
+            "Toxicity level",
+            "Metabolic origin",
+            "Solubility in water",
+            "Amount excreted"
+        ],
+        correctAnswer: 1,
+        reasoning: "Humans excrete 'small quantities of uric acid, primarily from the breakdown of nucleic acids, not proteins (~1g per day in urine)'. Uricotelic animals excrete it as their primary nitrogenous waste from protein metabolism. This highlights a difference in metabolic origin."
+    },
+    {
+        question: "The primary physiological benefit of tubular secretion, distinct from ultrafiltration and reabsorption, is to:",
+        options: [
+            "Increase the glomerular filtration rate",
+            "Recover essential water from the filtrate",
+            "Regulate urine pH and eliminate certain wastes",
+            "Establish the medullary osmotic gradient"
+        ],
+        correctAnswer: 2,
+        reasoning: "The text states, 'Tubular Secretion... Main purpose is to maintain urine pH (normal range 4.8-7.5)' and secrete 'drugs, toxins'."
+    },
+    {
+        question: "The right kidney is positioned slightly lower than the left. This anatomical distinction is primarily due to the presence of the:",
+        options: [
+            "Pancreas",
+            "Spleen",
+            "Liver",
+            "Stomach"
+        ],
+        correctAnswer: 2,
+        reasoning: "The document explicitly states, 'The right kidney is slightly lower than the left due to the liver'."
+    },
+    {
+        question: "In response to a significant drop in ambient temperature, which immediate physiological adjustment in a human would primarily aim to reduce heat loss from the body surface?",
+        options: [
+            "Increased respiration rate",
+            "Piloerection",
+            "Sweating",
+            "Increased adrenaline secretion"
+        ],
+        correctAnswer: 1,
+        reasoning: "Piloerection ('goose-pimples') causes hairs to stand up, trapping a layer of air and enhancing insulation, thus reducing heat loss. While adrenaline increases heat production, piloerection is a direct heat conservation mechanism."
+    },
+    {
+        question: "A patient experiences a sudden and rapid decline in kidney function over a few days, potentially triggered by severe dehydration or hemorrhage. This scenario most closely aligns with the onset of:",
+        options: [
+            "Chronic Renal Failure (CRF)",
+            "End-Stage Renal Disease (ESRD)",
+            "Acute Kidney Failure (ARF)",
+            "Pyelonephritis"
+        ],
+        correctAnswer: 2,
+        reasoning: "The text describes 'Acute Kidney Failure (ARF): Sudden inability of kidneys to filter wastes (over hours/days). Causes: Low blood flow (e.g., hemorrhage, vomiting, diarrhea, diuresis, sweating)'."
+    },
+    {
+        question: "Among the primary nitrogenous excretory products, which requires the *least* amount of water for its elimination per gram of nitrogen?",
+        options: [
+            "Ammonia",
+            "Urea",
+            "Uric Acid",
+            "Creatinine"
+        ],
+        correctAnswer: 2,
+        reasoning: "The document provides the water requirements: 'Ammonia... ~500 ml', 'Urea... ~50 ml', 'Uric Acid... ~1 ml per 1g nitrogen'."
+    },
+    {
+        question: "The countercurrent multiplier mechanism relies on the specific permeability characteristics of the Loop of Henle and the anti-parallel flow in the vasa recta to primarily achieve:",
+        options: [
+            "Consistent glomerular filtration pressure",
+            "Fine-tuning of blood pH",
+            "Generation of a medullary osmotic gradient",
+            "Rapid removal of toxins from the blood"
+        ],
+        correctAnswer: 2,
+        reasoning: "The text states, 'Countercurrent Multiplier Mechanism... creating and maintaining an osmotic gradient in the renal medulla'."
+    },
+    {
+        question: "The act of micturition in humans is ultimately controlled by which muscular structures guarding the bladder's neck?",
+        options: [
+            "Renal papillae",
+            "Internal and external urethral sphincters",
+            "Calyces",
+            "Afferent and efferent arterioles"
+        ],
+        correctAnswer: 1,
+        reasoning: "The urinary bladder's 'Neck guarded by two sphincters', which control the release of urine during micturition."
+    },
+    {
+        question: "The primary internal source of heat production (thermogenesis) in mammals is the:",
+        options: [
+            "Absorption of solar radiation",
+            "Evaporation of sweat from the skin",
+            "Chemical reactions of ingested nutrients",
+            "Conduction of heat from warmer objects"
+        ],
+        correctAnswer: 2,
+        reasoning: "The document states, 'Thermogenesis (Heat Production)... Sources: Respiratory metabolism (breakdown of carbohydrates and fats)'."
+    },
+    {
+        question: "HLA matching is a critical component of kidney transplant compatibility because mismatches can directly lead to:",
+        options: [
+            "Hypercalcemia in the recipient",
+            "T-cell mediated rejection of the graft",
+            "Increased risk of kidney stone formation",
+            "Urethral blockage post-surgery"
+        ],
+        correctAnswer: 1,
+        reasoning: "The text states, 'HLA (Human Leukocyte Antigens) matching... HLA mismatching can cause T-cell mediated rejection'."
+    },
+    {
+        question: "The extensive brush-border epithelium of the Proximal Convoluted Tubule is crucial for:",
+        options: [
+            "Preventing the passage of large proteins during filtration",
+            "Increasing surface area for efficient selective reabsorption",
+            "Maintaining the impermeability of the descending limb to solutes",
+            "Actively secreting hydrogen ions into the filtrate"
+        ],
+        correctAnswer: 1,
+        reasoning: "The PCT is 'Lined with brush-border epithelial cells for increased surface area and selective reabsorption'."
+    },
+    {
+        question: "For larger kidney stones that do not respond to sound wave therapy (ESWL), a common surgical intervention involves direct insertion of a tube into the kidney. This procedure is called:",
+        options: [
+            "Open surgery",
+            "Percutaneous Nephro Lithotripsy (PCNL)",
+            "Ureteroscopy",
+            "Dialysis"
+        ],
+        correctAnswer: 1,
+        reasoning: "The document mentions, 'PCNL (Percutaneous Nephro Lithotripsy): For larger stones or ESWL failures. Involves inserting a tube into the kidney, using a scope and ultrasound to break and remove fragments'."
+    },
+    {
+        question: "Terrestrial mammals are ureotelic. This excretory strategy is an adaptation primarily to:",
+        options: [
+            "Maximize ammonia toxicity",
+            "Conserve water",
+            "Enhance metabolic energy expenditure",
+            "Facilitate rapid waste elimination"
+        ],
+        correctAnswer: 1,
+        reasoning: "Urea is 'moderately toxic' and requires less water (~50 ml/g N) for excretion compared to ammonia (~500 ml/g N), making it an adaptation for 'terrestrial mammals' to 'conserve water'."
+    },
+    {
+        question: "Which critical nephron component is *exclusively* found within the renal medulla, contributing to its distinct appearance as renal pyramids?",
+        options: [
+            "Glomerulus",
+            "Bowman's Capsule",
+            "Collecting ducts (portions)",
+            "Proximal Convoluted Tubule"
+        ],
+        correctAnswer: 2,
+        reasoning: "The medulla 'contains cone-shaped renal pyramids'. Collecting ducts 'extend into medulla, deliver urine to renal pelvis', forming a significant part of these pyramids. Glomerulus, Bowman's capsule, and PCT are in the cortex."
+    },
+    {
+        question: "If the hypothalamus detects a drop in core body temperature, which physiological response would it *not* typically activate?",
+        options: [
+            "Vasoconstriction",
+            "Shivering",
+            "Activation of sweat glands",
+            "Increased thyroid hormone release"
+        ],
+        correctAnswer: 2,
+        reasoning: "The text states, 'If Body Temperature Falls: Vasoconstriction, shivering, piloerection, increased metabolic rate (thyroxin, adrenaline), inhibit sweating/panting.' Activation of sweat glands would increase heat loss, which is counterproductive in cold conditions."
+    },
+    {
+        question: "The glomerular filtrate, immediately after ultrafiltration, is essentially blood plasma *minus*:",
+        options: [
+            "All salts and glucose",
+            "Water and small solutes",
+            "Large proteins, red blood cells, and platelets",
+            "Urea and creatinine"
+        ],
+        correctAnswer: 2,
+        reasoning: "The filtration barrier 'allowing filtration of plasma constituents but retaining large proteins, RBCs, and platelets'. Small solutes, water, urea, creatinine, salts, and glucose *are* filtered."
+    },
+    {
+        question: "Beyond waste filtration, the kidneys play a crucial role in blood pressure regulation through the secretion of:",
+        options: [
+            "Erythropoietin",
+            "Aldosterone",
+            "Renin",
+            "ADH"
+        ],
+        correctAnswer: 2,
+        reasoning: "The document states, 'Other Kidney Functions: Control red blood cell formation (by secreting erythropoietin) and regulate blood pressure (by secreting renin)'."
+    },
+    {
+        question: "An animal relying heavily on vasodilation and sweating to regulate its body temperature would struggle most in which environment?",
+        options: [
+            "A cool, dry desert",
+            "A hot, humid jungle",
+            "A temperate grassland",
+            "A frigid arctic tundra"
+        ],
+        correctAnswer: 1,
+        reasoning: "Vasodilation and sweating are heat loss mechanisms. Sweating primarily cools via evaporation. In a hot, humid jungle, the high humidity would severely limit the rate of evaporation, thus significantly impairing the animal's ability to cool down effectively."
+    },
+    {
+        question: "A 'negative cross match' is essential before a kidney transplant to ensure that the recipient's blood:",
+        options: [
+            "Has compatible HLA antigens with the donor",
+            "Does not clot too quickly with donor blood",
+            "Does not produce antibodies against the donor's blood",
+            "Has sufficient blood volume for the transplant"
+        ],
+        correctAnswer: 2,
+        reasoning: "The document specifies, 'Negative cross match: Donor's blood must not initiate an antibody response with recipient's blood'."
+    },
+    {
+        question: "Aldosterone, an adrenal cortical hormone, primarily influences the reabsorption of which ion in the renal tubules?",
+        options: [
+            "Potassium",
+            "Calcium",
+            "Sodium",
+            "Chloride"
+        ],
+        correctAnswer: 2,
+        reasoning: "The text states, 'Aldosterone (adrenal cortical hormone) influences Na+ reabsorption'."
+    },
+    {
+        question: "Pyelonephritis is a urinary tract infection specifically affecting the:",
+        options: [
+            "Urethra",
+            "Urinary bladder",
+            "Kidneys",
+            "Ureters"
+        ],
+        correctAnswer: 2,
+        reasoning: "The document categorizes UTIs by location: 'Urethritis (urethra), Cystitis (bladder), Pyelonephritis (kidneys)'."
+    },
+    {
+        question: "Some marine organisms, despite being aquatic, excrete urea. This strategy, when compared to ammonia excretion, is advantageous because urea is:",
+        options: [
+            "Less soluble in saltwater",
+            "More toxic, requiring active transport",
+            "Less toxic than ammonia",
+            "Energy-free to produce"
+        ],
+        correctAnswer: 2,
+        reasoning: "Urea is described as 'Moderately toxic (100,000 times less toxic than ammonia)'. While it requires energy to produce, its significantly lower toxicity compared to ammonia means less water is needed for dilution, which can be an advantage even for marine organisms as they maintain internal osmolarity."
+    },
+    {
+        question: "The funnel-shaped chamber within the kidney that collects urine from the major calyces and leads into the ureter is the:",
+        options: [
+            "Renal cortex",
+            "Renal medulla",
+            "Renal pelvis",
+            "Hilum"
+        ],
+        correctAnswer: 2,
+        reasoning: "The document states, 'Renal Pelvis: Funnel-shaped chamber formed by major calyces, leads into the ureter'."
+    },
+    {
+        question: "A poikilothermic organism is suddenly transported from a warm environment to a significantly colder one. The most immediate and significant challenge to its physiological function would be:",
+        options: [
+            "Overproduction of metabolic heat",
+            "Inability to maintain optimal enzyme activity",
+            "Rapid dehydration due to shivering",
+            "Excessive blood pressure fluctuations"
+        ],
+        correctAnswer: 1,
+        reasoning: "Poikilotherms are 'Unable to maintain a constant body temperature physiologically' and rely on external heat. A cold environment would lower their body temperature, directly impacting 'enzyme function' which is 'critical for survival'."
+    },
+    {
+        question: "The relative narrowness of the efferent arteriole compared to the afferent arteriole is primarily responsible for:",
+        options: [
+            "Facilitating tubular secretion in the DCT",
+            "Increasing the resistance to blood flow within the glomerulus",
+            "Enhancing oxygen delivery to the renal medulla",
+            "Promoting selective reabsorption in the PCT"
+        ],
+        correctAnswer: 1,
+        reasoning: "The glomerulus is 'supplied by an afferent arteriole and drained by a narrower efferent arteriole, which creates high hydrostatic pressure for filtration'. This narrowness increases resistance to blood flow, building pressure behind it, crucial for ultrafiltration."
+    },
+    {
+        question: "Among the listed symptoms of Chronic Renal Failure, which one is a direct consequence of the kidneys' impaired ability to control red blood cell formation?",
+        options: [
+            "Edema",
+            "Anemia",
+            "High blood pressure",
+            "Metallic taste in mouth"
+        ],
+        correctAnswer: 1,
+        reasoning: "The document states, 'Other Kidney Functions: Control red blood cell formation (by secreting erythropoietin)'. Impaired kidney function in CRF would lead to reduced erythropoietin, resulting in anemia."
+    },
+    {
+        question: "The outer region of the kidney, containing renal corpuscles and convoluted tubules of nephrons, is called the:",
+        options: [
+            "Medulla",
+            "Renal pelvis",
+            "Cortex",
+            "Hilum"
+        ],
+        correctAnswer: 2,
+        reasoning: "The internal structure of the kidney includes the 'Cortex: Outer region, contains renal corpuscles and convoluted tubules of nephrons'."
+    }
+];
+
+// Update CSS variables with custom colors
+document.documentElement.style.setProperty('--primary-blue', '#1a56db');
+document.documentElement.style.setProperty('--secondary-blue', '#0ea5e9');
+document.documentElement.style.setProperty('--accent-green', '#10b981');
+document.documentElement.style.setProperty('--accent-orange', '#f59e0b');
+document.documentElement.style.setProperty('--accent-red', '#ef4444');
+document.documentElement.style.setProperty('--accent-purple', '#8b5cf6');
+document.documentElement.style.setProperty('--accent-pink', '#ec4899');
+document.documentElement.style.setProperty('--accent-teal', '#14b8a6');
+
+// Global state variables
+const QUIZ_ACCESS_CODE = "Dev-PDA-0002";
+const DEV_ACCESS_CODE = "Dev-PDA-001";
+const ACADEMY_NAME = "PreMium Nexus Testing Service";
+const PAYMENT_NUMBER = "5272";
+const PAYMENT_ACCOUNT_HOLDER = "Account Holder Name";
+const QUIZ_SUBJECT = "Excretion ";
+const WEBSITE_LINK = "https://premiumdoctoracademy.com";
+const WHATSAPP_CONTACT = "923247012882";
+const WHATSAPP_COMMUNITY = "https://whatsapp.com/channel/0029VbBCnMDHAdNVl9hGKJ3B";
+const TIME_PER_MCQ = 60;
+const MARK_PER_MCQ = 1;
+const NEGATIVE_MARKING = 0;
+
+let currentQuizId = 'Dev-PDA-0002';
+let quizData = quizData_Dev_PDA_0002;
+let currentQuestion = 0;
+let userAnswers = Array(quizData.length).fill(null);
+let outOfSyllabusQuestions = Array(quizData.length).fill(false);
+let timeLeft;
+let questionTimeLeft;
+let totalTimeInterval;
+let questionTimeInterval;
+let studentData = {};
+
+// DOM elements
+const signinPage = document.getElementById('signin-page');
+const registrationPage = document.getElementById('registration-page');
+const paymentPage = document.getElementById('payment-page');
+const quizAccessPage = document.getElementById('quiz-access-page');
+const quizPage = document.getElementById('quiz-page');
+const resultsPage = document.getElementById('results-page');
+const allMcqsPage = document.getElementById('all-mcqs-page');
+const questionNavEl = document.getElementById('question-nav');
+const questionTextEl = document.getElementById('question-text');
+const optionsContainerEl = document.getElementById('options-container');
+const reasoningEl = document.getElementById('reasoning');
+const reasoningTextEl = document.getElementById('reasoning-text');
+const quizTitleEl = document.getElementById('quiz-title');
+const quizSubjectEl = document.getElementById('quiz-subject');
+const perMcqTimeEl = document.getElementById('per-mcq-time');
+const totalTimerEl = document.getElementById('timer');
+const questionTimerEl = document.getElementById('question-timer');
+const quizProgressEl = document.getElementById('quiz-progress');
+const studentInfoTable = document.getElementById('student-info-table');
+const quizResultsTable = document.getElementById('quiz-results-table');
+const allMcqsList = document.getElementById('all-mcqs-list');
+const devPasswordInput = document.getElementById('developerPassword');
+const devErrorBox = document.getElementById('dev-error-box');
+const quizAccessCodeInput = document.getElementById('quizAccessCode');
+const quizAccessErrorBox = document.getElementById('quiz-error-box');
+const quizAccessFinalInput = document.getElementById('quizAccessFinal');
+const finalQuizErrorBox = document.getElementById('final-quiz-error-box');
+const toggleDevPasswordIcon = document.getElementById('toggleDeveloperPassword');
+const toggleQuizCodeIcon = document.getElementById('toggleQuizAccessCode');
+const toggleFinalQuizIcon = document.getElementById('toggleQuizAccessFinal');
+const websiteLinkEl = document.getElementById('website-link');
+const whatsappContactLinkEl = document.getElementById('whatsapp-contact-link');
+const whatsappCommunityLinkEl = document.getElementById('whatsapp-community-link');
+const reasoningBtn = document.getElementById('reasoning-btn');
+
+// Update academy name in the DOM
+document.querySelectorAll('.logo h1, .promo-banner h2').forEach(el => {
+    el.textContent = el.textContent.replace('PreMium Nexus Testing Service', ACADEMY_NAME);
+});
+
+// Update payment details
+const paymentWhatsappLink = document.getElementById('payment-whatsapp-link');
+if (paymentWhatsappLink) {
+    paymentWhatsappLink.href = 'https://wa.me/' + PAYMENT_NUMBER;
+    paymentWhatsappLink.textContent = PAYMENT_NUMBER;
+}
+const paymentAccountHolderEl = document.getElementById('payment-account-holder');
+if (paymentAccountHolderEl) {
+    paymentAccountHolderEl.textContent = PAYMENT_ACCOUNT_HOLDER;
+}
+
+// Event listeners for password visibility
+if (toggleDevPasswordIcon) toggleDevPasswordIcon.addEventListener('click', () => togglePasswordVisibility('developerPassword', 'toggleDeveloperPassword'));
+if (toggleQuizCodeIcon) toggleQuizCodeIcon.addEventListener('click', () => togglePasswordVisibility('quizAccessCode', 'toggleQuizAccessCode'));
+if (toggleFinalQuizIcon) toggleFinalQuizIcon.addEventListener('click', () => togglePasswordVisibility('quizAccessFinal', 'toggleQuizAccessFinal'));
+
+// Functions
+function showPage(pageId) {
+    const pages = document.querySelectorAll('.page');
+    pages.forEach(page => page.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+}
+
+function togglePasswordVisibility(inputID, iconID) {
+    const passwordInput = document.getElementById(inputID);
+    const toggleIcon = document.getElementById(iconID);
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.remove('fa-eye-slash');
+        toggleIcon.classList.add('fa-eye');
+    } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.remove('fa-eye');
+        toggleIcon.classList.add('fa-eye-slash');
+    }
+}
+
+function showQuizAccessForm() {
+    document.getElementById('quiz-access-form').style.display = 'flex';
+    document.getElementById('developer-access-form').style.display = 'none';
+}
+
+function showDeveloperAccessForm() {
+    document.getElementById('developer-access-form').style.display = 'flex';
+    document.getElementById('quiz-access-form').style.display = 'none';
+}
+
+function showRegistrationPage() {
+    showPage('registration-page');
+}
+
+function checkDeveloperPassword() {
+    if (devPasswordInput.value === DEV_ACCESS_CODE) {
+        devErrorBox.style.display = 'none';
+        startQuiz('Dev-PDA-0002', 'Developer');
+    } else {
+        devErrorBox.style.display = 'block';
+    }
+}
+
+function checkQuizAccessCode() {
+    if (quizAccessCodeInput.value === QUIZ_ACCESS_CODE) {
+        quizAccessErrorBox.style.display = 'none';
+        showPage('quiz-access-page');
+    } else {
+        quizAccessErrorBox.style.display = 'block';
+    }
+}
+
+function accessQuiz() {
+    if (quizAccessFinalInput.value === QUIZ_ACCESS_CODE) {
+        finalQuizErrorBox.style.display = 'none';
+        startQuiz('Dev-PDA-0002', 'Student');
+    } else {
+        finalQuizErrorBox.style.display = 'block';
+    }
+}
+
+function validateRegistrationForm() {
+    const fields = ['studentName', 'fatherName', 'email', 'mobile'];
+    for (const field of fields) {
+        if (document.getElementById(field).value.trim() === '') {
+            alert('Please fill in all the registration details.');
+            return;
+        }
+    }
+    
+    studentData = {
+        'Student Name': document.getElementById('studentName').value,
+        'Father Name': document.getElementById('fatherName').value,
+        'Email Address': document.getElementById('email').value,
+        'Mobile Number': document.getElementById('mobile').value
+    };
+
+    // Save to local storage
+    localStorage.setItem('studentData', JSON.stringify(studentData));
+    
+    showPage('payment-page');
+}
+
+function submitPayment() {
+    // Collect the data from the form fields
+    const transactionId = document.getElementById('transactionId').value;
+    const accountHolderName = document.getElementById('accountHolderName').value;
+    const amountSent = document.getElementById('amountSent').value;
+
+    // Check if the acknowledgment box is checked
+    if (!document.getElementById('acknowledgment').checked) {
+        alert('Please check the acknowledgment box to proceed.');
+        return;
+    }
+
+    // Check for empty fields.
+    if (!transactionId || !accountHolderName || !amountSent) {
+        alert('Please ensure all required fields are filled out.');
+        return;
+    }
+    
+    // Load student data from local storage
+    const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+    
+    // Combine all data into a single object
+    const formData = {
+        studentName: studentData['Student Name'],
+        fatherName: studentData['Father Name'],
+        email: studentData['Email Address'],
+        mobile: studentData['Mobile Number'],
+        transactionId: transactionId,
+        accountHolderName: accountHolderName,
+        amountSent: amountSent
+    };
+
+    // Replace this URL with the one you copied from Apps Script
+    const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbyt_Ui7bwAl-tGKvonneZbOkYYo6zRlxOhRvCVISSbnX8DGKgpqmrjQ-soQdPBzXM8/exec';
+    
+    // Send the data using the fetch API
+    fetch(appsScriptUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        cache: 'no-cache',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(formData)
+    })
+    .then(response => {
+        // Since we are using 'no-cors', the response is not readable.
+        // We just assume success if the fetch operation completes.
+        console.log('Data sent successfully!');
+        alert("Payment details submitted successfully! You will receive your Quiz Access Code shortly.");
+        showPage('quiz-access-page');
+    })
+    .catch(error => {
+        console.error('Error submitting data:', error);
+        alert("There was an error submitting your details. Please try again or contact support.");
+    });
+}
+
+function startQuiz(quizId, userType) {
+    currentQuizId = quizId;
+    quizData = quizData_Dev_PDA_0002;
+    currentQuestion = 0;
+    userAnswers = Array(quizData.length).fill(null);
+    outOfSyllabusQuestions = Array(quizData.length).fill(false);
+    
+    // Set total time based on time per question
+    timeLeft = quizData.length * TIME_PER_MCQ;
+    questionTimeLeft = TIME_PER_MCQ;
+
+    showPage('quiz-page');
+    initQuiz();
+}
+
+function initQuiz() {
+    // Set quiz subject and time per MCQ
+    quizSubjectEl.textContent = QUIZ_SUBJECT;
+    perMcqTimeEl.textContent = Math.floor(TIME_PER_MCQ / 60);
+    
+    // Set contact links
+    websiteLinkEl.href = WEBSITE_LINK;
+    whatsappContactLinkEl.href = 'https://wa.me/' + WHATSAPP_CONTACT;
+    whatsappCommunityLinkEl.href = WHATSAPP_COMMUNITY;
+    
+    quizTitleEl.textContent = `Test - ID: ${currentQuizId}`;
+    renderQuestionNav();
+    renderQuestion();
+
+    if (totalTimeInterval) clearInterval(totalTimeInterval);
+    if (questionTimeInterval) clearInterval(questionTimeInterval);
+    
+    totalTimeInterval = setInterval(updateTotalTimer, 1000);
+    questionTimeInterval = setInterval(updateQuestionTimer, 1000);
+}
+
+function updateTotalTimer() {
+    if (timeLeft > 0) {
+        timeLeft--;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        totalTimerEl.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    } else {
+        clearInterval(totalTimeInterval);
+        submitTest();
+    }
+}
+
+function updateQuestionTimer() {
+    if (questionTimeLeft > 0) {
+        questionTimeLeft--;
+        questionTimerEl.textContent = `${questionTimeLeft}`;
+    } else {
+        questionTimeLeft = TIME_PER_MCQ;
+        navigateQuestion('next');
+    }
+}
+
+function renderQuestionNav() {
+    questionNavEl.innerHTML = '';
+    quizData.forEach((_, index) => {
+        const navItem = document.createElement('div');
+        navItem.classList.add('question-nav-item');
+        navItem.textContent = index + 1;
+        navItem.onclick = () => navigateQuestion(index);
+        
+        if (index === currentQuestion) {
+            navItem.classList.add('current');
+        } else if (userAnswers[index] !== null) {
+            navItem.classList.add('solved');
+        } else if (outOfSyllabusQuestions[index]) {
+            navItem.classList.add('out-of-syllabus');
+        } else {
+            navItem.classList.add('visited');
+        }
+        
+        questionNavEl.appendChild(navItem);
+    });
+    updateProgressBar();
+}
+
+function updateProgressBar() {
+    const solvedCount = userAnswers.filter(answer => answer !== null).length;
+    const progress = (solvedCount / quizData.length) * 100;
+    quizProgressEl.style.width = `${progress}%`;
+}
+
+function renderQuestion() {
+    reasoningEl.style.display = 'none';
+    reasoningBtn.classList.add('disabled');
+    const question = quizData[currentQuestion];
+    questionTextEl.textContent = `${currentQuestion + 1}. ${question.question}`;
+    
+    optionsContainerEl.innerHTML = '';
+    question.options.forEach((option, index) => {
+        const optionEl = document.createElement('div');
+        optionEl.classList.add('option');
+        optionEl.textContent = option;
+        
+        // Add click listener only if not already answered
+        if (userAnswers[currentQuestion] === null) {
+        optionEl.onclick = () => selectOption(index);
+        } else {
+        // Show visual feedback for already answered questions
+        if (index === userAnswers[currentQuestion]) {
+            optionEl.classList.add(userAnswers[currentQuestion] === question.correctAnswer ? 'correct' : 'incorrect');
+        }
+        }
+        
+        optionsContainerEl.appendChild(optionEl);
+    });
+    
+    questionTimeLeft = TIME_PER_MCQ;
+    questionTimerEl.textContent = `${questionTimeLeft}`;
+    renderQuestionNav();
+}
+
+function selectOption(optionIndex) {
+    const question = quizData[currentQuestion];
+    userAnswers[currentQuestion] = optionIndex;
+    
+    // Enable reasoning button
+    reasoningBtn.classList.remove('disabled');
+    
+    // Apply visual feedback
+    const options = optionsContainerEl.querySelectorAll('.option');
+    options.forEach((option, index) => {
+        option.onclick = null; // Disable further clicks
+        if (index === question.correctAnswer) {
+            option.classList.add('correct');
+        } else if (index === optionIndex) {
+            option.classList.add('incorrect');
+        }
+    });
+
+    renderQuestionNav();
+}
+
+function navigateQuestion(direction) {
+    if (direction === 'next') {
+        currentQuestion = (currentQuestion + 1) % quizData.length;
+    } else if (direction === 'prev') {
+        currentQuestion = (currentQuestion - 1 + quizData.length) % quizData.length;
+    } else if (direction === 'skip') {
+        // Do nothing, just move to the next question
+        currentQuestion = (currentQuestion + 1) % quizData.length;
+    } else {
+        currentQuestion = direction;
+    }
+    renderQuestion();
+}
+
+function toggleReasoning() {
+    if (reasoningBtn.classList.contains('disabled')) return;
+    
+    const question = quizData[currentQuestion];
+    if (reasoningEl.style.display === 'block') {
+        reasoningEl.style.display = 'none';
+    } else {
+        reasoningTextEl.textContent = question.reasoning;
+        reasoningEl.style.display = 'block';
+    }
+}
+
+function markOutOfSyllabus() {
+    outOfSyllabusQuestions[currentQuestion] = true;
+    userAnswers[currentQuestion] = null;
+    renderQuestionNav();
+    navigateQuestion('next');
+}
+
+function submitTest() {
+    if (confirm('Are you sure you want to submit the quiz?')) {
+        clearInterval(totalTimeInterval);
+        clearInterval(questionTimeInterval);
+
+        let correct = 0;
+        let incorrect = 0;
+        let unanswered = 0;
+        let outOfSyllabus = 0;
+
+        quizData.forEach((question, index) => {
+            if (outOfSyllabusQuestions[index]) {
+                outOfSyllabus++;
+            } else if (userAnswers[index] === null) {
+                unanswered++;
+            } else if (userAnswers[index] === question.correctAnswer) {
+                correct++;
+            } else {
+                incorrect++;
+            }
+        });
+
+        const totalQuestions = quizData.length;
+        const totalScore = (correct * MARK_PER_MCQ) - (incorrect * NEGATIVE_MARKING);
+        const totalMarks = totalQuestions * MARK_PER_MCQ;
+
+        // Load student data from local storage
+        const savedStudentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+        
+        // Populate student info table
+        let studentInfoHtml = '';
+        for (const [key, value] of Object.entries(savedStudentData)) {
+            studentInfoHtml += `<tr><td>${key}</td><td>${value}</td></tr>`;
+        }
+        studentInfoTable.innerHTML = studentInfoHtml;
+
+        // Populate quiz results table
+        quizResultsTable.innerHTML = `
+            <tr><td>Total Questions</td><td>${totalQuestions}</td></tr>
+            <tr><td>Correct Answers</td><td>${correct}</td></tr>
+            <tr><td>Incorrect Answers</td><td>${incorrect}</td></tr>
+            <tr><td>Unanswered</td><td>${unanswered}</td></tr>
+            <tr><td>Out of Syllabus</td><td>${outOfSyllabus}</td></tr>
+            <tr><td>Mark Per MCQ</td><td>${MARK_PER_MCQ}</td></tr>
+            <tr><td>Negative Marking</td><td>${NEGATIVE_MARKING}</td></tr>
+            <tr><td>Your Score</td><td>${totalScore} / ${totalMarks}</td></tr>
+        `;
+
+        showPage('results-page');
+    }
+}
+
+function restartTest() {
+    if (confirm('Are you sure you want to retake the full test? Your current progress will be lost.')) {
+        // Reset quiz data and state
+        quizData = quizData_Dev_PDA_0002;
+        currentQuestion = 0;
+        userAnswers = Array(quizData.length).fill(null);
+        outOfSyllabusQuestions = Array(quizData.length).fill(false);
+        timeLeft = quizData.length * TIME_PER_MCQ;
+        
+        showPage('quiz-page');
+        initQuiz();
+    }
+}
+
+function retakeIncorrect() {
+    const incorrectQuestions = quizData.filter((question, index) => 
+        !outOfSyllabusQuestions[index] && 
+        userAnswers[index] !== null && 
+        userAnswers[index] !== question.correctAnswer);
+    
+    if (incorrectQuestions.length === 0) {
+        alert('You have no incorrect questions to retake!');
+        return;
+    }
+    
+    quizData = incorrectQuestions;
+    currentQuestion = 0;
+    userAnswers = Array(quizData.length).fill(null);
+    outOfSyllabusQuestions = Array(quizData.length).fill(false);
+    timeLeft = quizData.length * TIME_PER_MCQ;
+    
+    showPage('quiz-page');
+    initQuiz();
+}
+
+function viewAllMcqs() {
+    allMcqsList.innerHTML = '';
+    quizData_Dev_PDA_0002.forEach((question, index) => {
+        const mcqItem = document.createElement('div');
+        mcqItem.classList.add('all-mcq-item');
+        mcqItem.innerHTML = `
+            <div class="question-text">${index + 1}. ${question.question}</div>
+            <div class="all-mcq-options">
+                ${question.options.map((option, optIndex) => `
+                    <div class="all-mcq-option ${optIndex === question.correctAnswer ? 'correct' : ''}">
+                        ${option}
+                    </div>
+                `).join('')}
+            </div>
+            <div class="all-mcq-reasoning">
+                <strong>Reasoning:</strong> ${question.reasoning}
+            </div>
+        `;
+        allMcqsList.appendChild(mcqItem);
+    });
+    showPage('all-mcqs-page');
+}
+
+// Initial state
+showPage('signin-page');
+
+</script>
+</body>
+</html>
+                            
